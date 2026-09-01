@@ -1,9 +1,25 @@
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { useCategoryData } from "../hooks";
+import CategoryCard from "../components/cards/CategoryCard";
 const Categories = () => {
+    const {categories, addCategory} = useCategoryData()
+
+    const [title, setTitle] = useState("");
+    const [type, setType] = useState("");
+
     useEffect(()=>{
         document.title = "Categories | MoneyFlow";
     }, []);
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+        addCategory({
+            id : crypto.randomUUID(),
+            title, 
+            type
+        })
+    }
+    
     return (
         <section className="h-full p-6">
 
@@ -28,22 +44,28 @@ const Categories = () => {
                         Add Category
                     </h2>
 
-                    <form className="flex flex-col gap-4">
+                    <form className="flex flex-col gap-4"
+                        onSubmit={handleFormSubmit}
+                    >
 
                         {/* Category Name */}
                         <div className="flex flex-col gap-1.5">
                             <label
-                                htmlFor="category-name"
+                                htmlFor="category-title"
                                 className="text-sm font-medium text-gray-700"
                             >
-                                Category Name
+                                Category Title
                             </label>
 
                             <input
-                                id="category-name"
+                                id="category-title"
                                 type="text"
                                 placeholder="e.g. Salary"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={title}
+                                onChange={(e)=>{
+                                    setTitle(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -59,6 +81,10 @@ const Categories = () => {
                             <select
                                 id="category-type"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={type}
+                                onChange={(e)=>{
+                                    setType(e.target.value)
+                                }}
                             >
                                 <option value="">Select type</option>
                                 <option value="income">Income</option>
@@ -92,76 +118,12 @@ const Categories = () => {
                     </div>
 
                     <div className="flex flex-col gap-3">
-
-                        {/* Category Card */}
-                        <div className="rounded-lg border border-gray-200 p-4">
-
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Salary
-                                    </h3>
-
-                                    <span className="mt-1 inline-block rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-                                        Income
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="text-sm text-gray-400 hover:text-purple-600"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-
-                            <div className="mt-4">
-                                <p className="text-xs text-gray-500">
-                                    This month
-                                </p>
-
-                                <p className="mt-1 text-lg font-semibold text-green-600">
-                                    ₹60,000
-                                </p>
-                            </div>
-
-                        </div>
-
-
-                        {/* Category Card */}
-                        <div className="rounded-lg border border-gray-200 p-4">
-
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Freelance
-                                    </h3>
-
-                                    <span className="mt-1 inline-block rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-                                        Income
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="text-sm text-gray-400 hover:text-purple-600"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-
-                            <div className="mt-4">
-                                <p className="text-xs text-gray-500">
-                                    This month
-                                </p>
-
-                                <p className="mt-1 text-lg font-semibold text-green-600">
-                                    ₹18,500
-                                </p>
-                            </div>
-
-                        </div>
-
+                        {categories.filter(category => category.type === "income").map(category => (
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                            />
+                        ))}
                     </div>
                 </div>
 
@@ -173,118 +135,18 @@ const Categories = () => {
                         <h2 className="text-lg font-semibold text-gray-900">
                             Expense Categories
                         </h2>
-
                         <p className="mt-1 text-sm text-gray-500">
                             Where your money goes
                         </p>
                     </div>
 
                     <div className="flex flex-col gap-3">
-
-                        {/* Category Card */}
-                        <div className="rounded-lg border border-gray-200 p-4">
-
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Food
-                                    </h3>
-
-                                    <span className="mt-1 inline-block rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="text-sm text-gray-400 hover:text-purple-600"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-
-                            <div className="mt-4">
-                                <p className="text-xs text-gray-500">
-                                    This month
-                                </p>
-
-                                <p className="mt-1 text-lg font-semibold text-red-600">
-                                    ₹8,450
-                                </p>
-                            </div>
-
-                        </div>
-
-
-                        {/* Category Card */}
-                        <div className="rounded-lg border border-gray-200 p-4">
-
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Shopping
-                                    </h3>
-
-                                    <span className="mt-1 inline-block rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="text-sm text-gray-400 hover:text-purple-600"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-
-                            <div className="mt-4">
-                                <p className="text-xs text-gray-500">
-                                    This month
-                                </p>
-
-                                <p className="mt-1 text-lg font-semibold text-red-600">
-                                    ₹12,300
-                                </p>
-                            </div>
-
-                        </div>
-
-
-                        {/* Category Card */}
-                        <div className="rounded-lg border border-gray-200 p-4">
-
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Transport
-                                    </h3>
-
-                                    <span className="mt-1 inline-block rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="text-sm text-gray-400 hover:text-purple-600"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-
-                            <div className="mt-4">
-                                <p className="text-xs text-gray-500">
-                                    This month
-                                </p>
-
-                                <p className="mt-1 text-lg font-semibold text-red-600">
-                                    ₹4,200
-                                </p>
-                            </div>
-
-                        </div>
-
+                        {categories.filter(category => category.type === "expense").map(category => (
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                            />
+                        ))}
                     </div>
                 </div>
 
