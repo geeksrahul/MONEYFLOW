@@ -7,7 +7,7 @@ function useCategoryData() {
     useEffect(()=>{
         saveData()
     }, [categories])
-
+    // add, update, delete
     function addCategory(category) {
         setCategories(prev => [...prev, category])
     }
@@ -17,12 +17,14 @@ function useCategoryData() {
     function updateCategory(id, newCategory) {
         setCategories(prev => prev.map(category => category.id === id ? newCategory : category))
     }
+    // save & load
     function saveData() {
         localStorage.setItem("categories", JSON.stringify(categories))
     }
     function loadData() {
         return JSON.parse(localStorage.getItem("categories") ?? "[]")
     }
+    // returning state and method
     return {categories, addCategory, removeCategory, updateCategory};
 }
 

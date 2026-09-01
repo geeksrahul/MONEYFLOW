@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
-import { useCategoryData } from "../hooks";
+import { useEffect, useRef, useState } from "react";
 import CategoryCard from "../components/cards/CategoryCard";
+import { useCategory } from "../contexts";
+
 const Categories = () => {
-    const {categories, addCategory} = useCategoryData()
+    const {categories, addCategory} = useCategory();
 
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
 
+    const focusInput = useRef()
+
     useEffect(()=>{
         document.title = "Categories | MoneyFlow";
+        focusInput.current.focus();
     }, []);
+
+    const cleanUp = () => {
+        setTitle("");
+        setType("");
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
@@ -18,6 +27,8 @@ const Categories = () => {
             title, 
             type
         })
+        cleanUp();
+        focusInput.current.focus();
     }
     
     return (
@@ -66,6 +77,7 @@ const Categories = () => {
                                 onChange={(e)=>{
                                     setTitle(e.target.value)
                                 }}
+                                ref={focusInput}
                             />
                         </div>
 

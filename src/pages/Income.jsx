@@ -1,17 +1,30 @@
-import { useEffect, useState } from "react";
-import { useIncomeData } from "../hooks";
+import { useEffect, useState, useRef } from "react";
 import { IncomeDataRow } from "../components/data";
+import { useCategory, useIncomes } from "../contexts";
+
 const Income = () => {
-    const {incomes, addIncome} = useIncomeData();
+    const {incomes, addIncome} = useIncomes();
+    const {categories} = useCategory();
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
     const [category, setCategory] = useState("");
     const [note, setNote] = useState("");
 
+    const focusInput = useRef()
     useEffect(()=>{
         document.title = "Incomes | MoneyFlow";
+        focusInput.current.focus()
     }, []);
+
+
+    const cleanUp = () => {
+        setTitle("");
+        setAmount("");
+        setDate("");
+        setCategory("");
+        setNote("");
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -23,6 +36,8 @@ const Income = () => {
             category, 
             note
         });
+        cleanUp();
+        focusInput.current.focus();
     }
     return (
         <section className="h-full p-2">
@@ -68,8 +83,9 @@ const Income = () => {
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
                                 value={title}
                                 onChange={(e) => {
-                                    setSource(e.target.value);
+                                    setTitle(e.target.value);
                                 }}
+                                ref={focusInput}
                             />
                         </div>
 
@@ -131,11 +147,14 @@ const Income = () => {
                                     setCategory(e.target.value);
                                 }}
                             >
-                                <option value="">Select category</option>
-                                <option value="salary">Salary</option>
-                                <option value="freelance">Freelance</option>
-                                <option value="investment">Investment</option>
-                                <option value="other">Other</option>
+
+                                {
+                                    categories
+                                    .filter(category => category.type === "income")
+                                    .map((category) => (
+                                        <option value={category.title} key={category.id}> {category.title} </option>
+                                    ))
+                                }
                             </select>
                         </div>
 

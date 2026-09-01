@@ -1,19 +1,31 @@
-import { useEffect, useState } from "react";
-import { useExpenseData } from "../hooks";
+import { useEffect, useRef, useState } from "react";
 import { ExpenseDataRow } from "../components/data";
+import { useCategory, useExpenses } from "../contexts";
 
 const Expense = () => {
-    const {expenses, addExpense} = useExpenseData()
+    const {expenses, addExpense} = useExpenses();
+    const {categories} = useCategory();
 
-        const [title, setTitle] = useState("");
-        const [amount, setAmount] = useState("");
-        const [date, setDate] = useState("");
-        const [category, setCategory] = useState("");
-        const [note, setNote] = useState("");
+    const [title, setTitle] = useState("");
+    const [amount, setAmount] = useState("");
+    const [date, setDate] = useState("");
+    const [category, setCategory] = useState("");
+    const [note, setNote] = useState("");
+
+    const focusInput = useRef()
 
     useEffect(()=>{
         document.title = "Expenses | MoneyFlow";
+        focusInput.current.focus()
     }, []);
+
+    const cleanUp = () => {
+        setTitle("");
+        setAmount("");
+        setDate("");
+        setCategory("");
+        setNote("");
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
@@ -25,6 +37,8 @@ const Expense = () => {
             category, 
             note
         })
+        cleanUp();
+        focusInput.current.focus()
     }
     return (
         <section className="h-full p-2">
@@ -72,6 +86,7 @@ const Expense = () => {
                                 onChange={(e)=>{
                                     setTitle(e.target.value)
                                 }}
+                                ref={focusInput}
                             />
                         </div>
 
@@ -133,13 +148,12 @@ const Expense = () => {
                                     setCategory(e.target.value)
                                 }}
                             >
-                                <option value="">Select category</option>
-                                <option value="food">Food</option>
-                                <option value="shopping">Shopping</option>
-                                <option value="transport">Transport</option>
-                                <option value="bills">Bills</option>
-                                <option value="entertainment">Entertainment</option>
-                                <option value="other">Other</option>
+                                {categories
+                                    .filter(category => category.type === "expense")
+                                    .map((category) => (
+                                        <option value={category.id} key={category.id}> {category.title} </option>
+                                    ))
+                                }
                             </select>
                         </div>
 
