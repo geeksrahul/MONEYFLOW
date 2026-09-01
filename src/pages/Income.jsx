@@ -1,10 +1,29 @@
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { useIncomeData } from "../hooks";
+import { IncomeDataRow } from "../components";
 const Income = () => {
+    const {incomes, addIncome} = useIncomeData();
+    const [source, setSource] = useState("");
+    const [amount, setAmount] = useState("");
+    const [date, setDate] = useState("");
+    const [category, setCategory] = useState("");
+    const [note, setNote] = useState("");
 
     useEffect(()=>{
         document.title = "Incomes | MoneyFlow";
     }, []);
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        addIncome({
+            id : crypto.randomUUID(),
+            source,
+            amount, 
+            date, 
+            category, 
+            note
+        });
+    }
     return (
         <section className="h-full p-2">
 
@@ -29,7 +48,9 @@ const Income = () => {
                         Add Income
                     </h2>
 
-                    <form className="flex flex-col gap-4">
+                    <form className="flex flex-col gap-4"
+                        onSubmit={handleFormSubmit}
+                    >
 
                         {/* Source */}
                         <div className="flex flex-col gap-1.5">
@@ -45,6 +66,10 @@ const Income = () => {
                                 type="text"
                                 placeholder="e.g. Salary"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={source}
+                                onChange={(e) => {
+                                    setSource(e.target.value);
+                                }}
                             />
                         </div>
 
@@ -62,6 +87,10 @@ const Income = () => {
                                 type="number"
                                 placeholder="₹ 0.00"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={amount}
+                                onChange={(e) => {
+                                    setAmount(e.target.value);
+                                }}
                             />
                         </div>
 
@@ -78,6 +107,10 @@ const Income = () => {
                                 id="date"
                                 type="date"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={date}
+                                onChange={(e) => {
+                                    setDate(e.target.value);
+                                }}
                             />
                         </div>
 
@@ -93,6 +126,10 @@ const Income = () => {
                             <select
                                 id="category"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={category}
+                                onChange={(e) => {
+                                    setCategory(e.target.value);
+                                }}
                             >
                                 <option value="">Select category</option>
                                 <option value="salary">Salary</option>
@@ -116,6 +153,10 @@ const Income = () => {
                                 rows="3"
                                 placeholder="Optional note..."
                                 className="resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={note}
+                                onChange={(e)=>{
+                                    setNote(e.target.value);
+                                }}
                             />
                         </div>
 
@@ -169,67 +210,9 @@ const Income = () => {
                             </thead>
 
                             <tbody>
-
-                                <tr className="border-b border-gray-100">
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        Monthly Salary
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-green-600">
-                                        ₹60,000
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        01 Sep 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-purple-100 px-2.5 py-1 text-xs font-medium text-purple-700">
-                                            Salary
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr className="border-b border-gray-100">
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        Freelance Project
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-green-600">
-                                        ₹18,500
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        28 Aug 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-700">
-                                            Freelance
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        Stock Dividend
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-green-600">
-                                        ₹5,200
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        25 Aug 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-orange-100 px-2.5 py-1 text-xs font-medium text-orange-700">
-                                            Investment
-                                        </span>
-                                    </td>
-                                </tr>
-
+                                {incomes.map(income => (
+                                    <IncomeDataRow key={income.id} data={income} />
+                                ))}
                             </tbody>
 
                         </table>
