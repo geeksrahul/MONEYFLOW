@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useIncomeData } from "../hooks";
-import { IncomeDataRow } from "../components";
+import { IncomeDataRow } from "../components/data";
 const Income = () => {
     const {incomes, addIncome} = useIncomeData();
-    const [source, setSource] = useState("");
+    const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
     const [category, setCategory] = useState("");
@@ -17,7 +17,7 @@ const Income = () => {
         e.preventDefault();
         addIncome({
             id : crypto.randomUUID(),
-            source,
+            title,
             amount, 
             date, 
             category, 
@@ -55,18 +55,18 @@ const Income = () => {
                         {/* Source */}
                         <div className="flex flex-col gap-1.5">
                             <label
-                                htmlFor="source"
+                                htmlFor="title"
                                 className="text-sm font-medium text-gray-700"
                             >
-                                Source
+                                Title
                             </label>
 
                             <input
-                                id="source"
+                                id="title"
                                 type="text"
                                 placeholder="e.g. Salary"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={source}
+                                value={title}
                                 onChange={(e) => {
                                     setSource(e.target.value);
                                 }}

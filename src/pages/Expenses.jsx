@@ -1,10 +1,31 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useExpenseData } from "../hooks";
+import { ExpenseDataRow } from "../components/data";
 
 const Expense = () => {
+    const {expenses, addExpense} = useExpenseData()
+
+        const [title, setTitle] = useState("");
+        const [amount, setAmount] = useState("");
+        const [date, setDate] = useState("");
+        const [category, setCategory] = useState("");
+        const [note, setNote] = useState("");
 
     useEffect(()=>{
         document.title = "Expenses | MoneyFlow";
     }, []);
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+        addExpense({
+            id: crypto.randomUUID(),
+            title, 
+            amount,
+            date, 
+            category, 
+            note
+        })
+    }
     return (
         <section className="h-full p-2">
 
@@ -29,22 +50,28 @@ const Expense = () => {
                         Add Expense
                     </h2>
 
-                    <form className="flex flex-col gap-4">
+                    <form className="flex flex-col gap-4"
+                        onSubmit={handleFormSubmit}
+                    >
 
                         {/* Description */}
                         <div className="flex flex-col gap-1.5">
                             <label
-                                htmlFor="description"
+                                htmlFor="title"
                                 className="text-sm font-medium text-gray-700"
                             >
-                                Description
+                                Title
                             </label>
 
                             <input
-                                id="description"
+                                id="title"
                                 type="text"
                                 placeholder="e.g. Grocery shopping"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={title}
+                                onChange={(e)=>{
+                                    setTitle(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -62,6 +89,10 @@ const Expense = () => {
                                 type="number"
                                 placeholder="₹ 0.00"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={amount}
+                                onChange={(e)=>{
+                                    setAmount(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -78,6 +109,10 @@ const Expense = () => {
                                 id="date"
                                 type="date"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={date}
+                                onChange={(e)=>{
+                                    setDate(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -93,6 +128,10 @@ const Expense = () => {
                             <select
                                 id="category"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={category}
+                                onChange={(e)=>{
+                                    setCategory(e.target.value)
+                                }}
                             >
                                 <option value="">Select category</option>
                                 <option value="food">Food</option>
@@ -118,6 +157,10 @@ const Expense = () => {
                                 rows="3"
                                 placeholder="Optional note..."
                                 className="resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                                value={note}
+                                onChange={(e)=>{
+                                    setNote(e.target.value)
+                                }}
                             />
                         </div>
 
@@ -171,67 +214,12 @@ const Expense = () => {
                             </thead>
 
                             <tbody>
-
-                                <tr className="border-b border-gray-100">
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        Grocery Shopping
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-red-600">
-                                        ₹2,450
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        01 Sep 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-                                            Food
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr className="border-b border-gray-100">
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        Electricity Bill
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-red-600">
-                                        ₹1,850
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        30 Aug 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-700">
-                                            Bills
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td className="px-3 py-4 font-medium text-gray-900">
-                                        New Shoes
-                                    </td>
-
-                                    <td className="px-3 py-4 font-medium text-red-600">
-                                        ₹3,200
-                                    </td>
-
-                                    <td className="px-3 py-4 text-gray-500">
-                                        28 Aug 2026
-                                    </td>
-
-                                    <td className="px-3 py-4">
-                                        <span className="rounded-full bg-orange-100 px-2.5 py-1 text-xs font-medium text-orange-700">
-                                            Shopping
-                                        </span>
-                                    </td>
-                                </tr>
-
+                                {expenses.map(expense => (
+                                    <ExpenseDataRow
+                                        key={expense.id}
+                                        data={expense}
+                                    />
+                                ))}
                             </tbody>
 
                         </table>
