@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="[grid-area:header] flex items-center justify-between border-b border-gray-200 px-6 w-full border-1 bg-white">
+    <header className="[grid-area:header] flex items-center justify-between border-b border-gray-200 px-6 w-full border bg-white">
       <div>
         <h1 className="text-xl font-medium text-gray-900">
           MoneyFlow
