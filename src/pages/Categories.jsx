@@ -32,7 +32,7 @@ const Categories = () => {
     }
     
     return (
-        <section className="h-full p-6">
+        <section className="max-h-screen p-6">
 
             {/* Page Header */}
             <div className="mb-6">
@@ -117,7 +117,7 @@ const Categories = () => {
 
 
                 {/* Income Categories */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 h-150 overflow-hidden">
 
                     <div className="mb-5">
                         <h2 className="text-lg font-semibold text-gray-900">
@@ -152,7 +152,7 @@ const Categories = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 overflow-hidden overflow-y-scroll">
                         {categories.filter(category => category.type === "expense").map(category => (
                             <CategoryCard
                                 key={category.id}

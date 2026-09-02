@@ -1,5 +1,3 @@
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -15,13 +13,6 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <button
-          type="button"
-          className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
-        >
-          <FontAwesomeIcon icon={faBell}/>
-        </button>
-
         <Link 
           to="/profile"
           className="flex items-center gap-3"
