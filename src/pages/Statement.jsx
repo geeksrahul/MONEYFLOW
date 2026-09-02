@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCategory, useTransaction } from "../contexts";
 import { LedgerDataRow } from "../components/data";
+import { getTotalExpense, getTotalIncome, getCurrentBalance } from "../utils/TransactionStats";
 
 const Statements = () => {
     const { transactions } = useTransaction();
@@ -10,25 +11,7 @@ const Statements = () => {
     const [categoryFilter, setCategoryFilter] = useState("all");
 
     let balance = 0;
-
-    const currentBalance = transactions.reduce((balance, transaction) => {
-        const amount = Number(transaction.amount);
-        return transaction.type === "income"
-            ? balance + amount
-            : balance - amount;
-    }, 0);
-
-    const totalIncome = transactions.reduce((income, transaction) => {
-        const amount = Number(transaction.amount);
-        return transaction.type === "income" ? income + amount : income;
-    }, 0)
-
-    const totalExpense = transactions.reduce((expense, transaction) => {
-        const amount = Number(transaction.amount);
-        return transaction.type === "expense" ? expense + amount : expense;
-    }, 0)
-
-
+    
     const ledger = transactions.filter(transaction => {
         const matchesType =
             typeFilter === "all" ||
@@ -196,7 +179,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {totalIncome}
+                            {getTotalIncome(transactions)}
                         </p>
                     </div>
                     <div className="text-right">
@@ -205,7 +188,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {totalExpense}
+                            {getTotalExpense(transactions)}
                         </p>
                     </div>
                     <div className="text-right">
@@ -214,7 +197,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {currentBalance}
+                            {getCurrentBalance(transactions)}
                         </p>
                     </div>
 
