@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
 const Sidebar = () => {
   return (
-    <aside className="[grid-area:sidebar] flex flex-col items-center border-r border-gray-200 bg-white py-4 fixed w-[96px] h-screen">
+    <aside className="[grid-area:sidebar] flex flex-col items-center border-r border-gray-200 bg-white py-4 fixed w-24 h-screen">
       
       {/* Logo */}
       <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600 text-lg font-bold text-white">

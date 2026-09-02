@@ -1,7 +1,7 @@
-import ExpenseDataRow from "./ExpenseDataRow";
-import IncomeDataRow from "./IncomeDataRow";
+import LedgerDataRow from "./LedgerDataRow";
+import TransactionRow from "./TransactionRow";
 
 export {
-    IncomeDataRow,
-    ExpenseDataRow
+    LedgerDataRow,
+    TransactionRow
 }

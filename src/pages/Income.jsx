@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { IncomeDataRow } from "../components/data";
-import { useCategory, useIncomes } from "../contexts";
+import { TransactionRow } from "../components/data";
+import { useCategory, useTransaction } from "../contexts";
 
 const Income = () => {
-    const {incomes, addIncome} = useIncomes();
+    const {transactions, addTransaction} = useTransaction();
     const {categories} = useCategory();
+
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
@@ -12,11 +13,11 @@ const Income = () => {
     const [note, setNote] = useState("");
 
     const focusInput = useRef()
+
     useEffect(()=>{
         document.title = "Incomes | MoneyFlow";
         focusInput.current.focus()
     }, []);
-
 
     const cleanUp = () => {
         setTitle("");
@@ -28,14 +29,20 @@ const Income = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        addIncome({
+        
+        const data = addTransaction({
             id : crypto.randomUUID(),
+            type : "income",
             title,
             amount, 
             date, 
             category, 
             note
         });
+
+        if(!data) {
+            console.log("can't add income");
+        }
         cleanUp();
         focusInput.current.focus();
     }
@@ -86,6 +93,7 @@ const Income = () => {
                                     setTitle(e.target.value);
                                 }}
                                 ref={focusInput}
+                                required={true}
                             />
                         </div>
 
@@ -107,6 +115,7 @@ const Income = () => {
                                 onChange={(e) => {
                                     setAmount(e.target.value);
                                 }}
+                                required={true}
                             />
                         </div>
 
@@ -127,6 +136,7 @@ const Income = () => {
                                 onChange={(e) => {
                                     setDate(e.target.value);
                                 }}
+                                required={true}
                             />
                         </div>
 
@@ -144,15 +154,17 @@ const Income = () => {
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
                                 value={category}
                                 onChange={(e) => {
+                                    console.log(e.target.value);
                                     setCategory(e.target.value);
                                 }}
+                                required={true}
                             >
-
+                                <option value="#" > Select Type </option>
                                 {
                                     categories
                                     .filter(category => category.type === "income")
-                                    .map((category) => (
-                                        <option value={category.title} key={category.id}> {category.title} </option>
+                                    .map((category) => ( 
+                                        <option value={category?.title} key={category?.id}> {category?.title} </option>
                                     ))
                                 }
                             </select>
@@ -211,7 +223,7 @@ const Income = () => {
                             <thead>
                                 <tr className="border-b border-gray-200 text-xs uppercase text-gray-500">
                                     <th className="px-3 py-3 font-medium">
-                                        Source
+                                        Title
                                     </th>
 
                                     <th className="px-3 py-3 font-medium">
@@ -229,8 +241,10 @@ const Income = () => {
                             </thead>
 
                             <tbody>
-                                {incomes.map(income => (
-                                    <IncomeDataRow key={income.id} data={income} />
+                                {transactions
+                                .filter(transaction => transaction.type === "income")
+                                .map(income => (
+                                    <TransactionRow key={income.id} data={income} />
                                 ))}
                             </tbody>
 

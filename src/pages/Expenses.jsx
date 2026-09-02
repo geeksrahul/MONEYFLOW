@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { ExpenseDataRow } from "../components/data";
-import { useCategory, useExpenses } from "../contexts";
+import { useCategory, useTransaction } from "../contexts";
+import { TransactionRow } from "../components/data";
 
 const Expense = () => {
-    const {expenses, addExpense} = useExpenses();
+    const {transactions, addTransaction} = useTransaction();
     const {categories} = useCategory();
 
     const [title, setTitle] = useState("");
@@ -29,14 +29,18 @@ const Expense = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
-        addExpense({
+        const data = addTransaction({
             id: crypto.randomUUID(),
+            type : "expense",
             title, 
             amount,
             date, 
             category, 
             note
         })
+        if(!data) {
+            console.error("can't add expense");
+        }
         cleanUp();
         focusInput.current.focus()
     }
@@ -108,6 +112,7 @@ const Expense = () => {
                                 onChange={(e)=>{
                                     setAmount(e.target.value)
                                 }}
+                                required={true}
                             />
                         </div>
 
@@ -128,6 +133,7 @@ const Expense = () => {
                                 onChange={(e)=>{
                                     setDate(e.target.value)
                                 }}
+                                required={true}
                             />
                         </div>
 
@@ -147,11 +153,13 @@ const Expense = () => {
                                 onChange={(e)=>{
                                     setCategory(e.target.value)
                                 }}
+                                required={true}
                             >
+                                <option value=""> Select Category </option>
                                 {categories
                                     .filter(category => category.type === "expense")
                                     .map((category) => (
-                                        <option value={category.id} key={category.id}> {category.title} </option>
+                                        <option value={category.value} key={category.id}> {category.title} </option>
                                     ))
                                 }
                             </select>
@@ -228,12 +236,17 @@ const Expense = () => {
                             </thead>
 
                             <tbody>
-                                {expenses.map(expense => (
-                                    <ExpenseDataRow
-                                        key={expense.id}
-                                        data={expense}
-                                    />
-                                ))}
+
+                                {
+                                    transactions
+                                    .filter(transaction => transaction.type === "expense")
+                                    .map(expense => (
+                                        <TransactionRow
+                                            key={expense.id}
+                                            data={expense}
+                                        />
+                                    ))
+                                }
                             </tbody>
 
                         </table>
