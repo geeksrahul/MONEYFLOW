@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { TransactionRow } from "../components/data";
 import { useCategory, useTransaction } from "../contexts";
+import { Link } from "react-router-dom";
 
 const Income = () => {
     const {transactions, addTransaction} = useTransaction();
@@ -209,12 +210,12 @@ const Income = () => {
                             Recent Incomes
                         </h2>
 
-                        <button
-                            type="button"
+                         <Link
+                            to="/statements"
                             className="text-sm font-medium text-purple-600 hover:text-purple-700"
                         >
                             View All
-                        </button>
+                         </Link>
                     </div>
 
                     <div className="overflow-x-auto">

@@ -21,8 +21,24 @@ const getTotalExpense = (transactions) => {
     }, 0)
 }
 
+const getTotalExpenseByCategory = (transactions, category) => {
+    return transactions.reduce((expense, transaction) => {
+        const amount = Number(transaction.amount);
+        if(transaction.type === "expense" && transaction.category === category) {
+            return expense + amount;
+        } else {
+            return expense;
+        }
+    }, 0)
+}
+
+const sortTransactionsByTime = (transactions, asc = true) => {
+    return [...transactions].sort((a, b) => asc ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date))
+}
 export {
     getCurrentBalance,
     getTotalExpense,
     getTotalIncome,
+    getTotalExpenseByCategory,
+    sortTransactionsByTime
 }

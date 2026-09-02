@@ -1,10 +1,24 @@
 import { useEffect } from "react";
 import { StatsCard, RecentTransactionCard } from "../components";
+import {useCategory, useTransaction} from "../contexts"
+import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../utils/TransactionStats";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-    useEffect(()=>{
-        document.title = "Dashboard | MoneyFlow";
-    }, []);
+
+  const {transactions} = useTransaction();
+  const {categories} = useCategory();
+
+
+  const currentBalance = getCurrentBalance(transactions)
+  const totalExpense = getTotalExpense(transactions)
+  const totalIncome = getTotalIncome(transactions)
+
+  const budget = 70000;
+  useEffect(()=>{
+      document.title = "Dashboard | MoneyFlow";
+  }, []);
+
   return (
     <section className="space-y-6">
       {/* Page Header */}
@@ -21,22 +35,22 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard 
             cardTitle="Total Balance"
-            cardMainData={`₹1,24,500`}
-            cardSubData="+8.2% this month"
+            cardMainData={currentBalance}
+            cardSubData="This month"
         />
         <StatsCard 
             cardTitle="Income"
-            cardMainData={`₹45,000`}
+            cardMainData={totalIncome}
             cardSubData="This month"
         />
         <StatsCard 
             cardTitle="Expenses"
-            cardMainData={`₹28,450`}
+            cardMainData={totalExpense}
             cardSubData="8.2% of income"
         />
         <StatsCard 
-            cardTitle="Savings"
-            cardMainData={`$1,24,500`}
+            cardTitle="Budget"
+            cardMainData={budget}
             cardSubData="36.7% of income"
         />
       </div>
@@ -74,39 +88,27 @@ const Dashboard = () => {
               Recent Transactions
             </h2>
 
-            <button
-              type="button"
+            <Link
+              to="/statements"
               className="text-sm font-medium text-purple-600 hover:text-purple-700"
             >
               View all
-            </button>
+            </Link>
           </div>
 
           <div className="mt-5 space-y-4">
+
+            {
+            sortTransactionsByTime(transactions, false)
+            .slice(0,5)
+            .map(transaction => (
                 <RecentTransactionCard 
-                    category={"Grocerray"}
-                    time={"Today"}
-                    amount={"₹2450"}
-                    spend={true}
+                    title={transaction.title}
+                    time={transaction.date}
+                    amount={transaction.amount}
+                    spend={transaction.type==="expense"}
                 />
-                <RecentTransactionCard 
-                    category={"Grocerray"}
-                    time={"Today"}
-                    amount={"₹450"}
-                    spend={false}
-                />
-                <RecentTransactionCard 
-                    category={"Grocerray"}
-                    time={"Today"}
-                    amount={"₹250"}
-                    spend={false}
-                />
-                <RecentTransactionCard 
-                    category={"Grocerray"}
-                    time={"Today"}
-                    amount={"₹2450"}
-                    spend={true}
-                />
+            ))}
           </div>
         </div>
       </div>
@@ -121,58 +123,43 @@ const Dashboard = () => {
                 Monthly Budget
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                ₹28,450 of ₹40,000 spent
+                ₹{totalExpense} of ₹{budget} spent
               </p>
             </div>
 
             <span className="text-sm font-medium text-gray-700">
-              71%
+              {Math.floor(getTotalExpense(transactions)/budget*100)}%
             </span>
           </div>
 
           <div className="mt-5 h-3 overflow-hidden rounded-full bg-gray-100">
-            <div className="h-full w-[71%] rounded-full bg-purple-600" />
+            <div className={`h-full w-[${(Math.floor(totalExpense/budget)*100)}%] rounded-full bg-purple-600`} />
           </div>
 
           <p className="mt-3 text-sm text-gray-500">
-            ₹11,550 remaining this month
+            ₹{budget - totalExpense} remaining this month
           </p>
         </div>
 
-        {/* Top Categories */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <h2 className="text-lg font-semibold text-gray-900">
             Top Spending Categories
           </h2>
 
           <div className="mt-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Food</span>
-              <span className="text-sm font-medium text-gray-900">
-                ₹8,250
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Shopping</span>
-              <span className="text-sm font-medium text-gray-900">
-                ₹6,800
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Transport</span>
-              <span className="text-sm font-medium text-gray-900">
-                ₹4,200
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Bills</span>
-              <span className="text-sm font-medium text-gray-900">
-                ₹3,750
-              </span>
-            </div>
+            {/* Top Categories */}
+            {categories
+            .filter(category => category.type === "expense")
+            .slice(0,3)
+            .map(category => (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">{category.title}</span>
+                <span className="text-sm font-medium text-gray-900">
+                  ₹{getTotalExpenseByCategory(transactions, category.title)}
+                </span>
+              </div>
+            ))
+            }
           </div>
         </div>
       </div>

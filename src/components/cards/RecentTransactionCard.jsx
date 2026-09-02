@@ -1,5 +1,5 @@
 const RecentTransactionCard = ({
-    category,
+    title,
     time,
     amount,
     spend=true
@@ -8,7 +8,7 @@ const RecentTransactionCard = ({
         <div className="flex items-center justify-between">
             <div>
             <p className="text-sm font-medium text-gray-900">
-                {category}
+                {title}
             </p>
             <p className="text-xs text-gray-500">
                 {time}

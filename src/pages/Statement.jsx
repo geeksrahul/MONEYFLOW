@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCategory, useTransaction } from "../contexts";
 import { LedgerDataRow } from "../components/data";
-import { getTotalExpense, getTotalIncome, getCurrentBalance } from "../utils/TransactionStats";
+import { getTotalExpense, getTotalIncome, getCurrentBalance, sortTransactionsByTime } from "../utils/TransactionStats";
 
 const Statements = () => {
     const { transactions } = useTransaction();
@@ -12,7 +12,7 @@ const Statements = () => {
 
     let balance = 0;
     
-    const ledger = transactions.filter(transaction => {
+    const ledger = sortTransactionsByTime(transactions.filter(transaction => {
         const matchesType =
             typeFilter === "all" ||
             transaction.type === typeFilter;
@@ -22,8 +22,7 @@ const Statements = () => {
             transaction.category === categoryFilter;
 
         return matchesType && matchesCategory;
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date)) // to sort ledger in ascending order of date
+    }))
     .map((transaction => {
         const amount = Number(transaction.amount)
         balance += transaction.type === "income" ? amount : -amount;
