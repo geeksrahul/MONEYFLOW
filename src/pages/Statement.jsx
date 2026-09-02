@@ -1,10 +1,57 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useCategory, useTransaction } from "../contexts";
+import { LedgerDataRow } from "../components/data";
 
 const Statements = () => {
-    
-    useEffect(()=>{
-        document.title = "Statements | MoneyFlow";
-    }, []);
+    const { transactions } = useTransaction();
+    const { categories } = useCategory();
+
+    const [typeFilter, setTypeFilter] = useState("all");
+    const [categoryFilter, setCategoryFilter] = useState("all");
+
+    let balance = 0;
+
+    const currentBalance = transactions.reduce((balance, transaction) => {
+        const amount = Number(transaction.amount);
+        return transaction.type === "income"
+            ? balance + amount
+            : balance - amount;
+    }, 0);
+
+    const totalIncome = transactions.reduce((income, transaction) => {
+        const amount = Number(transaction.amount);
+        return transaction.type === "income" ? income + amount : income;
+    }, 0)
+
+    const totalExpense = transactions.reduce((expense, transaction) => {
+        const amount = Number(transaction.amount);
+        return transaction.type === "expense" ? expense + amount : expense;
+    }, 0)
+
+
+    const ledger = transactions.filter(transaction => {
+        const matchesType =
+            typeFilter === "all" ||
+            transaction.type === typeFilter;
+
+        const matchesCategory =
+            categoryFilter === "all" ||
+            transaction.category === categoryFilter;
+
+        return matchesType && matchesCategory;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date)) // to sort ledger in ascending order of date
+    .map((transaction => {
+        const amount = Number(transaction.amount)
+        balance += transaction.type === "income" ? amount : -amount;
+        return {...transaction, balance}
+    })); // for adding balance attribute to each entries
+
+    const categoryOptions =
+        typeFilter === "all"
+            ? categories
+            : categories.filter(category => category.type === typeFilter);
+
     return (
         <section className="h-full p-6">
 
@@ -86,6 +133,10 @@ const Statements = () => {
                         <select
                             id="type"
                             className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            value={typeFilter}
+                            onChange={(e) => {
+                                setTypeFilter(e.target.value)
+                            }}
                         >
                             <option value="all">All</option>
                             <option value="income">Income</option>
@@ -106,13 +157,17 @@ const Statements = () => {
                         <select
                             id="category"
                             className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            value={categoryFilter}
+                            onChange={(e) => {
+                                setCategoryFilter(e.target.value)
+                            }}
                         >
-                            <option value="all">All Categories</option>
-                            <option value="salary">Salary</option>
-                            <option value="freelance">Freelance</option>
-                            <option value="food">Food</option>
-                            <option value="shopping">Shopping</option>
-                            <option value="transport">Transport</option>
+                            <option value="all"> All </option>
+                            {
+                                categoryOptions.map(category => (
+                                    <option key={category.id} value={category.title}> {category.title} </option>
+                                ))
+                            }
                         </select>
                     </div>
 
@@ -123,9 +178,9 @@ const Statements = () => {
             {/* Statement */}
             <div className="rounded-xl border border-gray-200 bg-white p-5">
 
-                <div className="mb-5 flex items-center justify-between">
+                <div className="mb-5 flex items-center justify-between gap-4">
 
-                    <div>
+                    <div className="flex-1">
                         <h2 className="text-lg font-semibold text-gray-900">
                             Account Statement
                         </h2>
@@ -137,11 +192,29 @@ const Statements = () => {
 
                     <div className="text-right">
                         <p className="text-xs text-gray-500">
+                            Total Income
+                        </p>
+
+                        <p className="mt-1 text-lg font-semibold text-gray-900">
+                            {totalIncome}
+                        </p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-xs text-gray-500">
+                            Total Expense
+                        </p>
+
+                        <p className="mt-1 text-lg font-semibold text-gray-900">
+                            {totalExpense}
+                        </p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-xs text-gray-500">
                             Current Balance
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            ₹72,250
+                            {currentBalance}
                         </p>
                     </div>
 
@@ -186,164 +259,19 @@ const Statements = () => {
 
                         <tbody>
 
-                            {/* Income */}
-                            <tr className="border-b border-gray-100">
+                            {
+                                ledger
+                                    .reverse()
+                                    .map((entry, idx) => {
+                                        return (
+                                            <LedgerDataRow
+                                                key={entry.id}
+                                                entry={entry}
+                                            >
+                                            </LedgerDataRow>
+                                        )
+                                    })}
 
-                                <td className="px-3 py-4 text-gray-500">
-                                    01 Sep 2026
-                                </td>
-
-                                <td className="px-3 py-4 font-medium text-gray-900">
-                                    Monthly Salary
-                                </td>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    Salary
-                                </td>
-
-                                <td className="px-3 py-4">
-                                    <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-                                        Income
-                                    </span>
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-green-600">
-                                    + ₹60,000
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-gray-900">
-                                    ₹60,000
-                                </td>
-
-                            </tr>
-
-
-                            {/* Expense */}
-                            <tr className="border-b border-gray-100">
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    01 Sep 2026
-                                </td>
-
-                                <td className="px-3 py-4 font-medium text-gray-900">
-                                    Grocery Shopping
-                                </td>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    Food
-                                </td>
-
-                                <td className="px-3 py-4">
-                                    <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-red-600">
-                                    - ₹2,450
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-gray-900">
-                                    ₹57,550
-                                </td>
-
-                            </tr>
-
-
-                            {/* Expense */}
-                            <tr className="border-b border-gray-100">
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    30 Aug 2026
-                                </td>
-
-                                <td className="px-3 py-4 font-medium text-gray-900">
-                                    Electricity Bill
-                                </td>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    Bills
-                                </td>
-
-                                <td className="px-3 py-4">
-                                    <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-red-600">
-                                    - ₹1,850
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-gray-900">
-                                    ₹55,700
-                                </td>
-
-                            </tr>
-
-
-                            {/* Income */}
-                            <tr className="border-b border-gray-100">
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    28 Aug 2026
-                                </td>
-
-                                <td className="px-3 py-4 font-medium text-gray-900">
-                                    Freelance Project
-                                </td>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    Freelance
-                                </td>
-
-                                <td className="px-3 py-4">
-                                    <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700">
-                                        Income
-                                    </span>
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-green-600">
-                                    + ₹18,500
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-gray-900">
-                                    ₹74,200
-                                </td>
-
-                            </tr>
-
-
-                            {/* Expense */}
-                            <tr>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    28 Aug 2026
-                                </td>
-
-                                <td className="px-3 py-4 font-medium text-gray-900">
-                                    New Shoes
-                                </td>
-
-                                <td className="px-3 py-4 text-gray-500">
-                                    Shopping
-                                </td>
-
-                                <td className="px-3 py-4">
-                                    <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700">
-                                        Expense
-                                    </span>
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-red-600">
-                                    - ₹3,200
-                                </td>
-
-                                <td className="px-3 py-4 text-right font-medium text-gray-900">
-                                    ₹71,000
-                                </td>
-
-                            </tr>
 
                         </tbody>
 
