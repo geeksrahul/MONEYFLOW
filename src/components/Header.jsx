@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts";
 
 const Header = () => {
+  const {user} = useUser();
   return (
     <header className="[grid-area:header] flex items-center justify-between border-b border-gray-200 px-6 w-full border bg-white">
       <div>
@@ -22,8 +24,8 @@ const Header = () => {
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-900">Rahul</p>
-            <p className="text-xs text-gray-500">Personal</p>
+            <p className="text-sm font-medium text-gray-900">{user?.personalData?.username}</p>
+            <p className="text-xs text-gray-500"> {user?.personalData?.email} </p>
           </div>
         </Link>
       </div>

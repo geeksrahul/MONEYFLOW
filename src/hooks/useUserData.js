@@ -1,5 +1,11 @@
+import { useEffect, useState } from "react";
+
 const useUserData = () => {
     const [user, setUser] = useState(() => loadData())
+
+    useEffect(()=>{
+        saveData();
+    }, [user])
 
     const updateUserData = (userData) => {
         setUser(userData);
@@ -13,7 +19,7 @@ const useUserData = () => {
     const saveData = () => {
         localStorage.setItem("moneyflow-user", JSON.stringify(user))
     }
-    const loadData = () => {
+    function loadData () {
         return JSON.parse(localStorage.getItem("moneyflow-user") ?? "[]")
     }
 

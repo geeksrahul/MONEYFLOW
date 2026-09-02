@@ -1,4 +1,5 @@
 import { createContext,  useContext } from "react";
+import { useUserData } from "../hooks";
 
 const UserContext = createContext({
     user : {
@@ -10,7 +11,7 @@ const UserContext = createContext({
 })
 
 const UserContextProvider = ({children}) => {
-    const {user, updateUserData, deleteUserData} = useUser()
+    const {user, updateUserData, deleteUserData} = useUserData()
     return (
         <UserContext.Provider value={{user, deleteUserData, updateUserData}}>
             {children}

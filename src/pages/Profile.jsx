@@ -1,4 +1,22 @@
+import { useState } from "react";
+import { useUser } from "../contexts";
+
 const Profile = () => {
+    const {user, updateUserData, deleteUserData} = useUser()
+
+    const [username, setUsername] = useState(user?.personalData?.username);
+    const [email, setEmail] = useState(user?.personalData?.email);
+    const [salary, setSalary] = useState(user?.financialData?.salary);
+    const [budget, setBudget] = useState(user?.financialData?.budget);
+    const [saving, setSaving] = useState(user?.financialData?.saving);
+
+    const saveUser = () => {
+        updateUserData({
+            personalData: {username, email},
+            financialData : {salary, budget, saving}
+        })
+    }
+
     return (
         <div className="min-h-full bg-slate-50 p-6">
             <div className="mx-auto max-w-5xl">
@@ -48,15 +66,11 @@ const Profile = () => {
                             {/* Profile information */}
                             <div>
                                 <h2 className="text-xl font-semibold text-slate-900">
-                                    Rahul
+                                    {user?.personalData?.username || "Rahul Baraiya"}
                                 </h2>
 
                                 <p className="mt-1 text-sm text-slate-500">
-                                    rahul@example.com
-                                </p>
-
-                                <p className="mt-3 text-xs text-slate-400">
-                                    JPG, PNG or WEBP · Max 5MB
+                                    {user?.personalData?.email || "rahul@example.com" }
                                 </p>
                             </div>
 
@@ -91,9 +105,12 @@ const Profile = () => {
                                 <input
                                     id="name"
                                     type="text"
-                                    defaultValue="Rahul"
                                     placeholder="Enter your name"
                                     className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                                    value={username}
+                                    onChange={(e)=> {
+                                        setUsername(e.target.value);
+                                    }}                                    
                                 />
                             </div>
 
@@ -110,9 +127,12 @@ const Profile = () => {
                                 <input
                                     id="email"
                                     type="email"
-                                    defaultValue="rahul@example.com"
                                     placeholder="Enter your email"
                                     className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                                    value={email}
+                                    onChange={(e)=> {
+                                        setEmail(e.target.value);
+                                    }} 
                                 />
                             </div>
 
@@ -152,9 +172,12 @@ const Profile = () => {
                                     <input
                                         id="salary"
                                         type="number"
-                                        defaultValue="50000"
                                         placeholder="50000"
                                         className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                                        value={salary}
+                                        onChange={(e)=>{
+                                            setSalary(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -177,9 +200,12 @@ const Profile = () => {
                                     <input
                                         id="budget"
                                         type="number"
-                                        defaultValue="30000"
                                         placeholder="30000"
                                         className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                                        value={budget}
+                                        onChange={(e)=>{
+                                            setBudget(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -202,9 +228,12 @@ const Profile = () => {
                                     <input
                                         id="saving"
                                         type="number"
-                                        defaultValue="20000"
                                         placeholder="20000"
                                         className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                                        value={saving}
+                                        onChange={(e)=>{
+                                            setSaving(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -226,6 +255,7 @@ const Profile = () => {
                         <button
                             type="button"
                             className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-violet-700"
+                            onClick={saveUser}
                         >
                             Save changes
                         </button>
