@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../contexts";
 
 const Profile = () => {
@@ -9,10 +9,12 @@ const Profile = () => {
     const [salary, setSalary] = useState(user?.financialData?.salary);
     const [budget, setBudget] = useState(user?.financialData?.budget);
     const [saving, setSaving] = useState(user?.financialData?.saving);
+    const [image, setImage] = useState("");
 
-    const saveUser = () => {
+
+    const saveUser = (image = "") => {
         updateUserData({
-            personalData: {username, email},
+            personalData: {username, email, image},
             financialData : {salary, budget, saving}
         })
     }
@@ -43,7 +45,7 @@ const Profile = () => {
                             {/* Avatar */}
                             <div className="relative">
                                 <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-3xl font-semibold text-violet-600 ring-4 ring-white shadow-md">
-                                    R
+                                    <img src={user.personalData.image || null} alt="not found " />
                                 </div>
 
                                 {/* Upload button */}
@@ -59,6 +61,14 @@ const Profile = () => {
                                     type="file"
                                     accept="image/*"
                                     className="hidden"
+                                    onChange={(e)=>{
+                                        const file = e.target.files[0];
+                                        const reader = new FileReader();
+                                        reader.readAsDataURL(file)
+                                        reader.onload = (e) => {
+                                            saveUser(e.target.result)
+                                        }
+                                    }}
                                 />
                             </div>
 

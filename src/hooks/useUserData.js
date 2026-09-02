@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const useUserData = () => {
     const [user, setUser] = useState(() => loadData())
-
+    
     useEffect(()=>{
         saveData();
     }, [user])
@@ -13,6 +13,10 @@ const useUserData = () => {
 
     const deleteUserData = () => {
         localStorage.removeItem("moneyflow-user");
+    }
+
+    const updateImage = (imgsrc) => {
+        
     }
 
     // save & load 

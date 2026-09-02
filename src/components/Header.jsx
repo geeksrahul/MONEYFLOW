@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../contexts";
+import { useEffect } from "react";
 
 const Header = () => {
   const {user} = useUser();
@@ -20,7 +21,7 @@ const Header = () => {
           className="flex items-center gap-3"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200 text-sm font-medium text-gray-700">
-            R
+            {user.personalData.image && (<img src={user.personalData.image} />)}
           </div>
 
           <div>
