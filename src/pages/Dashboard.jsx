@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { StatsCard, RecentTransactionCard } from "../components";
-import {useCategory, useTransaction} from "../contexts"
+import { StatsCard, RecentTransactionCard, AmountWrapper } from "../components";
+import {useCategory, useTransaction, useUser} from "../contexts"
 import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../utils/TransactionStats";
 import { Link } from "react-router-dom";
 
@@ -8,13 +8,18 @@ const Dashboard = () => {
 
   const {transactions} = useTransaction();
   const {categories} = useCategory();
+  const {user} = useUser();
 
+  const budget = Number(user?.financialData?.budget || 0)
 
   const currentBalance = getCurrentBalance(transactions)
   const totalExpense = getTotalExpense(transactions)
   const totalIncome = getTotalIncome(transactions)
+  const percentage = Math.round(totalExpense/budget*100);
 
-  const budget = 70000;
+  console.log(totalExpense, budget, percentage);
+  
+
   useEffect(()=>{
       document.title = "Dashboard | MoneyFlow";
   }, []);
@@ -103,6 +108,7 @@ const Dashboard = () => {
             .slice(0,5)
             .map(transaction => (
                 <RecentTransactionCard 
+                    key={transaction.id}
                     title={transaction.title}
                     time={transaction.date}
                     amount={transaction.amount}
@@ -123,21 +129,21 @@ const Dashboard = () => {
                 Monthly Budget
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                ₹{totalExpense} of ₹{budget} spent
+                <AmountWrapper amount={totalExpense} /> of <AmountWrapper amount={budget} /> spent
               </p>
             </div>
 
             <span className="text-sm font-medium text-gray-700">
-              {Math.floor(getTotalExpense(transactions)/budget*100)}%
+              {percentage}%
             </span>
           </div>
 
           <div className="mt-5 h-3 overflow-hidden rounded-full bg-gray-100">
-            <div className={`h-full w-[${(Math.floor(totalExpense/budget)*100)}%] rounded-full bg-purple-600`} />
+            <div className={`h-full rounded-full bg-purple-600`} style={{width: `${percentage}%`}}/>
           </div>
 
           <p className="mt-3 text-sm text-gray-500">
-            ₹{budget - totalExpense} remaining this month
+            <AmountWrapper amount={budget - totalExpense} /> remaining this month
           </p>
         </div>
 
@@ -152,10 +158,10 @@ const Dashboard = () => {
             .filter(category => category.type === "expense")
             .slice(0,3)
             .map(category => (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between" key={category.id}>
                 <span className="text-sm text-gray-600">{category.title}</span>
                 <span className="text-sm font-medium text-gray-900">
-                  ₹{getTotalExpenseByCategory(transactions, category.title)}
+                  <AmountWrapper amount={getTotalExpenseByCategory(transactions, category.title)} />
                 </span>
               </div>
             ))

@@ -1,3 +1,6 @@
+import AmountWrapper from "../AmountWrapper";
+
+
 const TransactionRow = ({data}) => {
     return (
           <tr className="border-b border-gray-100">
@@ -5,8 +8,8 @@ const TransactionRow = ({data}) => {
                 {data?.title}
             </td>
 
-            <td className={`px-3 py-4 font-medium ${data?.type === "ïncome" ? "text-green-600" : "text-red-600"} `}>
-                ₹{data?.amount}
+            <td className={`px-3 py-4 font-medium ${data?.type === "income" ? "text-green-600" : "text-red-600"} `}>
+                <AmountWrapper amount={data?.amount} />
             </td>
 
             <td className="px-3 py-4 text-gray-500">

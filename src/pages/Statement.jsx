@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useCategory, useTransaction } from "../contexts";
 import { LedgerDataRow } from "../components/data";
 import { getTotalExpense, getTotalIncome, getCurrentBalance, sortTransactionsByTime } from "../utils/TransactionStats";
-
+import { AmountWrapper } from "../components";
 const Statements = () => {
     const { transactions } = useTransaction();
     const { categories } = useCategory();
@@ -178,7 +178,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {getTotalIncome(transactions)}
+                            <AmountWrapper amount={getTotalIncome(transactions)} />
                         </p>
                     </div>
                     <div className="text-right">
@@ -187,7 +187,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {getTotalExpense(transactions)}
+                            <AmountWrapper amount={getTotalExpense(transactions)} />
                         </p>
                     </div>
                     <div className="text-right">
@@ -196,7 +196,7 @@ const Statements = () => {
                         </p>
 
                         <p className="mt-1 text-lg font-semibold text-gray-900">
-                            {getCurrentBalance(transactions)}
+                            <AmountWrapper amount={getCurrentBalance(transactions)}/>
                         </p>
                     </div>
 

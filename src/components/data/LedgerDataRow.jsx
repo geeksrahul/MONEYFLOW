@@ -1,3 +1,5 @@
+import AmountWrapper from "../AmountWrapper";
+
 const LedgerDataRow = ({entry, children}) => {
     return (
         <tr className="border-b border-gray-100">
@@ -20,11 +22,11 @@ const LedgerDataRow = ({entry, children}) => {
             </td>
 
             <td className={`px-3 py-4 text-right font-medium ${entry.type === "income" ? "text-green-600" : "text-red-700" } `}>
-                {`${entry.type === "income" ? '+' : '-'} ${entry.amount}`}
+                {`${entry.type === "income" ? '+' : '-'}`}<AmountWrapper amount={entry?.amount} />
             </td>
 
             <td className="px-3 py-4 text-right font-medium text-gray-900">
-                {entry.balance}
+                <AmountWrapper amount={entry?.balance} />
             </td>
             {children}
         </tr>

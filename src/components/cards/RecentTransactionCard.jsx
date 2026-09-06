@@ -1,3 +1,5 @@
+import AmountWrapper from "../AmountWrapper"
+ 
 const RecentTransactionCard = ({
     title,
     time,
@@ -15,7 +17,7 @@ const RecentTransactionCard = ({
             </p>
             </div>
             <span className={`text-sm font-medium ${spend ? 'text-red-500' : 'text-green-500'}`}>
-                {`${spend ? '-' : '+'} ${amount}`}
+                {`${spend ? '-' : '+'}`}<AmountWrapper amount={amount} />
             </span>
         </div>
     );

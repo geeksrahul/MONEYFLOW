@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts";
-
+import profileImage from "../assets/noprofilepic.jpg"
 const Profile = () => {
     const {user, updateUserData, deleteUserData} = useUser()
 
@@ -12,7 +12,7 @@ const Profile = () => {
     const [image, setImage] = useState("");
 
 
-    const saveUser = (image = "") => {
+    const saveUser = (image = null) => {
         updateUserData({
             personalData: {username, email, image},
             financialData : {salary, budget, saving}
@@ -44,8 +44,8 @@ const Profile = () => {
 
                             {/* Avatar */}
                             <div className="relative">
-                                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-3xl font-semibold text-violet-600 ring-4 ring-white shadow-md">
-                                    <img src={user.personalData.image || null} alt="not found " />
+                                <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-3xl font-semibold text-violet-600 ring-4 ring-white shadow-md border">
+                                    <img src={user.personalData.image ?? profileImage} alt="not found " />
                                 </div>
 
                                 {/* Upload button */}
@@ -265,7 +265,7 @@ const Profile = () => {
                         <button
                             type="button"
                             className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-violet-700"
-                            onClick={saveUser}
+                            onClick={()=>saveUser()}
                         >
                             Save changes
                         </button>

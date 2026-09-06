@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 const useUserData = () => {
-    const [user, setUser] = useState(() => loadData())
+    const [user, setUser] = useState(() => loadData());
     
     useEffect(()=>{
+        console.log(user);
         saveData();
     }, [user])
 
