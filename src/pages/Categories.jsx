@@ -32,7 +32,7 @@ const Categories = () => {
     }
     
     return (
-        <section className="max-h-screen p-6">
+        <section className="max-h-[calc(100vh-100px)] p-6 overflow-hidden">
 
             {/* Page Header */}
             <div className="mb-6">
@@ -49,7 +49,7 @@ const Categories = () => {
             <div className="grid grid-cols-[25%_1fr_1fr] gap-6">
 
                 {/* Add Category */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 max-h-140">
 
                     <h2 className="mb-5 text-lg font-semibold text-gray-900">
                         Add Category
@@ -117,7 +117,7 @@ const Categories = () => {
 
 
                 {/* Income Categories */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5 h-150 overflow-hidden">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 max-h-140">
 
                     <div className="mb-5">
                         <h2 className="text-lg font-semibold text-gray-900">
@@ -129,7 +129,7 @@ const Categories = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
                         {categories.filter(category => category.type === "income").map(category => (
                             <CategoryCard
                                 key={category.id}
@@ -141,8 +141,8 @@ const Categories = () => {
 
 
                 {/* Expense Categories */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
-
+                <div className="rounded-xl border border-gray-200 bg-white p-5 max-h-140">
+ 
                     <div className="mb-5">
                         <h2 className="text-lg font-semibold text-gray-900">
                             Expense Categories
@@ -152,7 +152,7 @@ const Categories = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-3 overflow-hidden overflow-y-scroll">
+                    <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
                         {categories.filter(category => category.type === "expense").map(category => (
                             <CategoryCard
                                 key={category.id}
