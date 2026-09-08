@@ -2,6 +2,7 @@ import Categories from "./Categories";
 import Dashboard from "./Dashboard";
 import Expenses from "./Expenses";
 import Incomes from "./Income";
+import Login from "./Login";
 import Profile from "./Profile";
 import Settings from "./Settings";
 import Statement from "./Statement";
@@ -12,5 +13,6 @@ export {
     Incomes,
     Profile,
     Settings,
-    Statement
+    Statement,
+    Login,
 }
