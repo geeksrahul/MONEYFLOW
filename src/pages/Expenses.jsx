@@ -1,36 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useCategory, useTransaction } from "../contexts";
 import { TransactionRow } from "../components/data";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const Expense = () => {
     const {transactions, addTransaction} = useTransaction();
     const {categories} = useCategory();
-
-    const [title, setTitle] = useState("");
-    const [amount, setAmount] = useState("");
-    const [date, setDate] = useState("");
-    const [category, setCategory] = useState("");
-    const [note, setNote] = useState("");
-
-    const focusInput = useRef()
+    const {register, handleSubmit, setFocus, reset, formState: {errors}} = useForm();
 
     useEffect(()=>{
         document.title = "Expenses | MoneyFlow";
-        focusInput.current.focus()
+        setFocus("title")
     }, []);
 
-    const cleanUp = () => {
-        setTitle("");
-        setAmount("");
-        setDate("");
-        setCategory("");
-        setNote("");
-    }
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
-        const data = addTransaction({
+    const handleAddTransaction = ({title, amount, date, category, note}) => {
+        const transaction = addTransaction({
             id: crypto.randomUUID(),
             type : "expense",
             title, 
@@ -38,12 +24,12 @@ const Expense = () => {
             date, 
             category, 
             note
-        })
-        if(!data) {
+        });
+        if(!transaction) {
             console.error("can't add expense");
         }
-        cleanUp();
-        focusInput.current.focus()
+        setFocus("title");
+        reset();
     }
     return (
         <section className="h-full p-2">
@@ -70,7 +56,7 @@ const Expense = () => {
                     </h2>
 
                     <form className="flex flex-col gap-4"
-                        onSubmit={handleFormSubmit}
+                        onSubmit={handleSubmit(handleAddTransaction)}
                     >
 
                         {/* Description */}
@@ -87,12 +73,14 @@ const Expense = () => {
                                 type="text"
                                 placeholder="e.g. Grocery shopping"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={title}
-                                onChange={(e)=>{
-                                    setTitle(e.target.value)
-                                }}
-                                ref={focusInput}
+                                {...register("title", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             />
+                            {errors.title && <p> {errors.title.message} </p> }
                         </div>
 
                         {/* Amount */}
@@ -109,12 +97,18 @@ const Expense = () => {
                                 type="number"
                                 placeholder="₹ 0.00"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={amount}
-                                onChange={(e)=>{
-                                    setAmount(e.target.value)
-                                }}
-                                required={true}
+                                {...register("amount", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    },
+                                    min : {
+                                        value : 1,
+                                        message : "amount must be greater than 0"
+                                    }
+                                })}
                             />
+                            {errors.amount && <p> {errors.amount.message} </p> }
                         </div>
 
                         {/* Date */}
@@ -130,12 +124,14 @@ const Expense = () => {
                                 id="date"
                                 type="date"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={date}
-                                onChange={(e)=>{
-                                    setDate(e.target.value)
-                                }}
-                                required={true}
+                                {...register("date", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             />
+                            {errors.date && <p> {errors.date.message} </p> }
                         </div>
 
                         {/* Category */}
@@ -150,11 +146,12 @@ const Expense = () => {
                             <select
                                 id="category"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={category}
-                                onChange={(e)=>{
-                                    setCategory(e.target.value)
-                                }}
-                                required={true}
+                                {...register("category", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             >
                                 <option value=""> Select Category </option>
                                 {categories
@@ -164,6 +161,7 @@ const Expense = () => {
                                     ))
                                 }
                             </select>
+                             {errors.category && <p> {errors.category.message} </p> }
                         </div>
 
                         {/* Note */}
@@ -180,11 +178,14 @@ const Expense = () => {
                                 rows="3"
                                 placeholder="Optional note..."
                                 className="resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={note}
-                                onChange={(e)=>{
-                                    setNote(e.target.value)
-                                }}
+                               {...register("note", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             />
+                        
                         </div>
 
                         <button
