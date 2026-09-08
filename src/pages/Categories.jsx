@@ -1,34 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import CategoryCard from "../components/cards/CategoryCard";
 import { useCategory } from "../contexts";
+import { set, useForm } from "react-hook-form";
 
 const Categories = () => {
     const {categories, addCategory} = useCategory();
-
-    const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
-
-    const focusInput = useRef()
+    const {register, handleSubmit, reset, setFocus, formState : {errors}} = useForm();
 
     useEffect(()=>{
         document.title = "Categories | MoneyFlow";
-        focusInput.current.focus();
+        setFocus("title")
     }, []);
 
-    const cleanUp = () => {
-        setTitle("");
-        setType("");
-    }
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
+    const handleAddCategory = ({title, type}) => {
         addCategory({
             id : crypto.randomUUID(),
             title, 
             type
         })
-        cleanUp();
-        focusInput.current.focus();
+        reset()
+        setFocus("title")
     }
     
     return (
@@ -56,7 +48,7 @@ const Categories = () => {
                     </h2>
 
                     <form className="flex flex-col gap-4"
-                        onSubmit={handleFormSubmit}
+                        onSubmit={handleSubmit(handleAddCategory)}
                     >
 
                         {/* Category Name */}
@@ -73,12 +65,14 @@ const Categories = () => {
                                 type="text"
                                 placeholder="e.g. Salary"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={title}
-                                onChange={(e)=>{
-                                    setTitle(e.target.value)
-                                }}
-                                ref={focusInput}
+                                {...register("title", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             />
+                            {errors.title && <p> {errors.title.message} </p> }
                         </div>
 
                         {/* Category Type */}
@@ -93,15 +87,18 @@ const Categories = () => {
                             <select
                                 id="category-type"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={type}
-                                onChange={(e)=>{
-                                    setType(e.target.value)
-                                }}
+                                {...register("type", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    }
+                                })}
                             >
                                 <option value="">Select type</option>
                                 <option value="income">Income</option>
                                 <option value="expense">Expense</option>
                             </select>
+                            {errors.type && <p> {errors.type.message} </p> }
                         </div>
 
                         {/* Button */}
