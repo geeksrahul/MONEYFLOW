@@ -1,18 +1,9 @@
-import { Outlet, useSearchParams } from "react-router-dom";
-import { MainPageWrapper, Header, Sidebar } from "./components";
+import { Outlet } from "react-router-dom";
+import { MainPageWrapper, Header, Sidebar } from "./components/";
 import {CategoriesContextProvider, TransactionContextProvider, UserContextProvider} from "./contexts";
-import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "./features/auth/authSlice";
-import { useEffect, useState } from "react";
-import { Login } from "./pages";
 
 const Layout = () => {
-    const [auth, setAuth] = useState(false)
-    const dispath = useDispatch()
-    const authStatus = useSelector(state => state.auth.authStatus);
-    useEffect(()=>{
-        setAuth(authStatus);
-    }, [authStatus]) 
+    
     return(
         <UserContextProvider>
             <CategoriesContextProvider>

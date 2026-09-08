@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { TransactionRow } from "../components/data";
-import { useCategory, useTransaction } from "../contexts";
+import { TransactionRow } from "../../components/data";
+import { useCategory, useTransaction } from "../../contexts";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 

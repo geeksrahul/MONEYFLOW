@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { StatsCard, RecentTransactionCard, AmountWrapper } from "../components";
-import {useCategory, useTransaction, useUser} from "../contexts"
-import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../utils/TransactionStats";
+import { StatsCard, RecentTransactionCard, AmountWrapper } from "../../components";
+import {useCategory, useTransaction, useUser} from "../../contexts"
+import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../../utils/TransactionStats";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 
 import './index.css'
 import store from "./store/store.js"
-import router from './router.jsx'
+import router from './routes/router.jsx'
 import Layout from './Layout.jsx'
 
 createRoot(document.getElementById('root')).render(

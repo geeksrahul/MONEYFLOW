@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import CategoryCard from "../components/cards/CategoryCard";
-import { useCategory } from "../contexts";
+import CategoryCard from "../../components/cards/CategoryCard";
+import { useCategory } from "../../contexts";
 import { useForm } from "react-hook-form";
 
 const Categories = () => {

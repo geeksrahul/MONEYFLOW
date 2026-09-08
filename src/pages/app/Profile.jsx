@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../contexts";
-import profileImage from "../assets/noprofilepic.jpg"
+import { useUser } from "../../contexts";
+import profileImage from "../../assets/noprofilepic.jpg"
 const Profile = () => {
     const {user, updateUserData, deleteUserData} = useUser()
 
