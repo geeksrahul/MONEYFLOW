@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import CategoryCard from "../components/cards/CategoryCard";
 import { useCategory } from "../contexts";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const Categories = () => {
     const {categories, addCategory} = useCategory();
@@ -11,7 +11,6 @@ const Categories = () => {
         document.title = "Categories | MoneyFlow";
         setFocus("title")
     }, []);
-
 
     const handleAddCategory = ({title, type}) => {
         addCategory({
