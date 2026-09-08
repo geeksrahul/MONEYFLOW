@@ -1,51 +1,34 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { TransactionRow } from "../components/data";
 import { useCategory, useTransaction } from "../contexts";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const Income = () => {
     const {transactions, addTransaction} = useTransaction();
     const {categories} = useCategory();
-
-    const [title, setTitle] = useState("");
-    const [amount, setAmount] = useState("");
-    const [date, setDate] = useState("");
-    const [category, setCategory] = useState("");
-    const [note, setNote] = useState("");
-
-    const focusInput = useRef()
+    const {register, handleSubmit, setFocus, reset, formState: {errors}} = useForm();
 
     useEffect(()=>{
         document.title = "Incomes | MoneyFlow";
-        focusInput.current.focus()
     }, []);
 
-    const cleanUp = () => {
-        setTitle("");
-        setAmount("");
-        setDate("");
-        setCategory("");
-        setNote("");
-    }
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        
-        const data = addTransaction({
-            id : crypto.randomUUID(),
-            type : "income",
+    const handleAddTransaction = ({title, amount, date, category, note}) => {
+        const transaction = addTransaction({
+            id: crypto.randomUUID(),
+            type: "income",
             title,
             amount, 
-            date, 
-            category, 
+            date,
+            category,
             note
         });
-
-        if(!data) {
-            console.log("can't add income");
+        if(!transaction) {
+            console.log("can't add transaction");
+        } else {
+            reset();
+            setFocus("title");
         }
-        cleanUp();
-        focusInput.current.focus();
     }
     return (
         <section className="h-full p-2">
@@ -72,7 +55,7 @@ const Income = () => {
                     </h2>
 
                     <form className="flex flex-col gap-4"
-                        onSubmit={handleFormSubmit}
+                        onSubmit={handleSubmit(handleAddTransaction)}
                     >
 
                         {/* Source */}
@@ -83,18 +66,26 @@ const Income = () => {
                             >
                                 Title
                             </label>
-
+                            {errors.title && <p> {errors.title.message} </p> }
                             <input
                                 id="title"
                                 type="text"
                                 placeholder="e.g. Salary"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={title}
-                                onChange={(e) => {
-                                    setTitle(e.target.value);
-                                }}
-                                ref={focusInput}
-                                required={true}
+                                {...register("title",{
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty"
+                                    },
+                                    minLength : {
+                                        value : 10,
+                                        message : "Title length must be 10-100"
+                                    },
+                                    maxLength : {
+                                        value : 100,
+                                        message : "cannot exceed title length"
+                                    }
+                                })}
                             />
                         </div>
 
@@ -106,17 +97,22 @@ const Income = () => {
                             >
                                 Amount
                             </label>
-
+                            {errors.amount && <p> {errors.amount.message} </p> }
                             <input
                                 id="amount"
                                 type="number"
                                 placeholder="₹ 0.00"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={amount}
-                                onChange={(e) => {
-                                    setAmount(e.target.value);
-                                }}
-                                required={true}
+                                {...register("amount", {
+                                    required : {
+                                        value : true,
+                                        message : "field cannot remain empty",
+                                    },
+                                    min: {
+                                        value : 1,
+                                        message : "transaction amount must be more than zero",
+                                    }
+                                })}
                             />
                         </div>
 
@@ -128,16 +124,17 @@ const Income = () => {
                             >
                                 Date
                             </label>
-
+                            {errors.date && <p> {errors.date.message} </p> }
                             <input
                                 id="date"
                                 type="date"
                                 className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={date}
-                                onChange={(e) => {
-                                    setDate(e.target.value);
-                                }}
-                                required={true}
+                                {...register("date", {
+                                    required : {
+                                        value: true,
+                                        message : "select an date please"
+                                    }
+                                })}
                             />
                         </div>
 
@@ -149,16 +146,16 @@ const Income = () => {
                             >
                                 Category
                             </label>
-
+                             {errors.category && <p> {errors.category.message} </p> }
                             <select
                                 id="category"
                                 className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={category}
-                                onChange={(e) => {
-                                    console.log(e.target.value);
-                                    setCategory(e.target.value);
-                                }}
-                                required={true}
+                                {...register("category", {
+                                    required : {
+                                        value : true,
+                                        message : "select an transaction category please"
+                                    }
+                                })}
                             >
                                 <option value="#" > Select Type </option>
                                 {
@@ -179,16 +176,12 @@ const Income = () => {
                             >
                                 Note
                             </label>
-
                             <textarea
                                 id="note"
                                 rows="3"
                                 placeholder="Optional note..."
                                 className="resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                                value={note}
-                                onChange={(e)=>{
-                                    setNote(e.target.value);
-                                }}
+                                {...register("note")}
                             />
                         </div>
 
