@@ -9,6 +9,7 @@ const Expense = () => {
     const {categories} = useCategory();
     const {register, handleSubmit, setFocus, reset, formState: {errors}} = useForm();
 
+    const expenseTransaction = transactions.filter(transaction => transaction.type === "expense")
     useEffect(()=>{
         document.title = "Expenses | MoneyFlow";
         setFocus("title")
@@ -213,7 +214,11 @@ const Expense = () => {
                             View All
                          </Link>
                     </div>
-
+                    {!expenseTransaction.length ? (
+                        <div className="w-full h-130 rounded-lg  bg-gray-100 grid place-items-center"> 
+                            No Expense Transaction Found 
+                        </div>
+                    ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
 
@@ -240,8 +245,7 @@ const Expense = () => {
                             <tbody>
 
                                 {
-                                    transactions
-                                    .filter(transaction => transaction.type === "expense")
+                                    expenseTransaction
                                     .map(expense => (
                                         <TransactionRow
                                             key={expense.id}
@@ -253,6 +257,7 @@ const Expense = () => {
 
                         </table>
                     </div>
+                    )}
                 </div>
 
             </div>

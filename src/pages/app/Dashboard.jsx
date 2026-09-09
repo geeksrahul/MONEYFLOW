@@ -140,9 +140,11 @@ const Dashboard = () => {
             </Link>
           </div>
 
-          <div className="mt-5 space-y-4">
+          <div className="h-84 mt-5 space-y-4">
+
 
             {
+              transactions.length<=0 ?<div className="h-full w-full bg-gray-100 rounded-lg grid place-items-center"> No Transaction Man</div> :
               sortTransactionsByTime(transactions, false)
                 .slice(0, 5)
                 .map(transaction => (
@@ -161,6 +163,8 @@ const Dashboard = () => {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Budget Progress */}
+        {transactions.length > 0 && (
+
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -185,6 +189,10 @@ const Dashboard = () => {
             <AmountWrapper amount={budget - totalExpense} /> remaining this month
           </p>
         </div>
+        )}
+
+
+        {categories.length >0 && (
 
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <h2 className="text-lg font-semibold text-gray-900">
@@ -207,6 +215,7 @@ const Dashboard = () => {
             }
           </div>
         </div>
+        )}
       </div>
     </section>
   );

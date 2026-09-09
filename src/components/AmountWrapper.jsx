@@ -3,6 +3,7 @@ const AmountWrapper = ({ amount }) => {
     if (Number.isNaN(value)) {
         return <>Invalid Amount</>;
     }
+    if (value === 0) return "---"; 
     const format = "en-IN";
     const currencySymbol = "₹";
     return (

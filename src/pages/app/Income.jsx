@@ -8,7 +8,7 @@ const Income = () => {
     const {transactions, addTransaction} = useTransaction();
     const {categories} = useCategory();
     const {register, handleSubmit, setFocus, reset, formState: {errors}} = useForm();
-
+    const incomeTransaction = transactions.filter(transaction => transaction.type === "income");
     useEffect(()=>{
         document.title = "Incomes | MoneyFlow";
     }, []);
@@ -210,7 +210,11 @@ const Income = () => {
                             View All
                          </Link>
                     </div>
-
+                    {!incomeTransaction.length ? (
+                        <div className="w-full h-130 rounded-lg  bg-gray-100 grid place-items-center"> 
+                            No Income Transaction Found 
+                        </div>
+                    ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
 
@@ -235,8 +239,7 @@ const Income = () => {
                             </thead>
 
                             <tbody>
-                                {transactions
-                                .filter(transaction => transaction.type === "income")
+                                {incomeTransaction
                                 .map(income => (
                                     <TransactionRow key={income.id} data={income} />
                                 ))}
@@ -244,6 +247,7 @@ const Income = () => {
 
                         </table>
                     </div>
+                    )}
                 </div>
 
             </div>

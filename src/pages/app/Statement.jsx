@@ -205,6 +205,13 @@ const Statements = () => {
 
 
                 {/* Ledger Table */}
+
+                {!transactions.length ?(
+                    <div className="w-full h-110 rounded-lg  bg-gray-100 grid place-items-center"> 
+                            No Transactions Found 
+                        </div>
+                ) : (
+
                 <div className="overflow-x-auto">
 
                     <table className="w-full text-left text-sm">
@@ -261,6 +268,7 @@ const Statements = () => {
                     </table>
 
                 </div>
+                )}
 
             </div>
 

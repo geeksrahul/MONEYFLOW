@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 const Categories = () => {
     const {categories, addCategory} = useCategory();
     const {register, handleSubmit, reset, setFocus, formState : {errors}} = useForm();
-
+    const incomeCategories = categories.filter(category => category.type === "income")
+    const expenseCategories = categories.filter(category => category.type === "expense")
     useEffect(()=>{
         document.title = "Categories | MoneyFlow";
         setFocus("title")
@@ -124,15 +125,20 @@ const Categories = () => {
                             Your income sources
                         </p>
                     </div>
-
-                    <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
-                        {categories.filter(category => category.type === "income").map(category => (
-                            <CategoryCard
-                                key={category.id}
-                                category={category}
-                            />
-                        ))}
-                    </div>
+                    {!incomeCategories.length ? (
+                        <div className="w-full h-110 rounded-lg  bg-gray-100 grid place-items-center"> 
+                            No Categories Found 
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
+                            {incomeCategories.map(category => (
+                                <CategoryCard
+                                    key={category.id}
+                                    category={category}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
 
@@ -148,14 +154,20 @@ const Categories = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
-                        {categories.filter(category => category.type === "expense").map(category => (
-                            <CategoryCard
-                                key={category.id}
-                                category={category}
-                            />
-                        ))}
-                    </div>
+                   {!expenseCategories.length ? (
+                        <div className="w-full h-110 rounded-lg  bg-gray-100 grid place-items-center"> 
+                            No Categories Found 
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3 h-110 overflow-y-scroll">
+                            {expenseCategories.map(category => (
+                                <CategoryCard
+                                    key={category.id}
+                                    category={category}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
             </div>
