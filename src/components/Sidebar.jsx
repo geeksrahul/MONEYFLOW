@@ -20,7 +20,7 @@ const Sidebar = () => {
       {/* Bottom */}
       <div className="mt-auto">
         <Link
-          to="/settings"
+          to="/app/settings"
           className="flex h-12 w-12 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100"
         >
           <FontAwesomeIcon icon={faGear} />

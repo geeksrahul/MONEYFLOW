@@ -5,27 +5,27 @@ import { faFileLines, faSquareMinus, faSquarePlus } from "@fortawesome/free-regu
 
 const navData = [
     {
-        to : "/dashboard",
+        to : "/app/",
         title : "Dashboard",
         icon : faPieChart,
     },
     {
-        to : "/incomes",
+        to : "/app/incomes",
         title : "Incomes",
         icon : faSquarePlus,
     },
     {
-        to : "/expenses",
+        to : "/app/expenses",
         title : "Expenses",
         icon : faSquareMinus,
     },
     {
-        to : "/categories",
+        to : "/app/categories",
         title : "Categories",
         icon : faLayerGroup,
     },
     {
-        to : "/statements",
+        to : "/app/statements",
         title : "Statements",
         icon : faFileLines,
     },

@@ -204,7 +204,7 @@ const Income = () => {
                         </h2>
 
                          <Link
-                            to="/statements"
+                            to="/app/statements"
                             className="text-sm font-medium text-purple-600 hover:text-purple-700"
                         >
                             View All

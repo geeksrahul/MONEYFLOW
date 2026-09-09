@@ -1,27 +1,27 @@
 import { useEffect } from "react";
 import { StatsCard, RecentTransactionCard, AmountWrapper } from "../../components";
-import {useCategory, useTransaction, useUser} from "../../contexts"
+import { useCategory, useTransaction, useUser } from "../../contexts"
 import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../../utils/TransactionStats";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
 
-  const {transactions} = useTransaction();
-  const {categories} = useCategory();
-  const {user} = useUser();
+  const { transactions } = useTransaction();
+  const { categories } = useCategory();
+  const { user } = useUser();
 
   const budget = Number(user?.financialData?.budget || 0)
 
   const currentBalance = getCurrentBalance(transactions)
   const totalExpense = getTotalExpense(transactions)
   const totalIncome = getTotalIncome(transactions)
-  const percentage = Math.round(totalExpense/budget*100);
+  const percentage = Math.round(totalExpense / budget * 100);
 
   console.log(totalExpense, budget, percentage);
-  
 
-  useEffect(()=>{
-      document.title = "Dashboard | MoneyFlow";
+
+  useEffect(() => {
+    document.title = "Dashboard | MoneyFlow";
   }, []);
 
   return (
@@ -38,25 +38,25 @@ const Dashboard = () => {
 
       {/* Summary Cards / Stats Card */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatsCard 
-            cardTitle="Total Balance"
-            cardMainData={currentBalance}
-            cardSubData="This month"
+        <StatsCard
+          cardTitle="Total Balance"
+          cardMainData={currentBalance}
+          cardSubData="This month"
         />
-        <StatsCard 
-            cardTitle="Income"
-            cardMainData={totalIncome}
-            cardSubData="This month"
+        <StatsCard
+          cardTitle="Income"
+          cardMainData={totalIncome}
+          cardSubData="This month"
         />
-        <StatsCard 
-            cardTitle="Expenses"
-            cardMainData={totalExpense}
-            cardSubData="8.2% of income"
+        <StatsCard
+          cardTitle="Expenses"
+          cardMainData={totalExpense}
+          cardSubData="8.2% of income"
         />
-        <StatsCard 
-            cardTitle="Budget"
-            cardMainData={budget}
-            cardSubData="36.7% of income"
+        <StatsCard
+          cardTitle="Budget"
+          cardMainData={budget}
+          cardSubData="36.7% of income"
         />
       </div>
 
@@ -64,11 +64,14 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
         {/* Spending Overview */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
+
           <div className="flex items-center justify-between">
+
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
                 Spending Overview
               </h2>
+
               <p className="mt-1 text-sm text-gray-500">
                 Your spending over the last few months.
               </p>
@@ -78,14 +81,50 @@ const Dashboard = () => {
               <option>Last 6 months</option>
               <option>This year</option>
             </select>
+
           </div>
 
-          {/* Chart Placeholder */}
-          <div className="mt-6 flex h-64 items-center justify-center rounded-xl bg-gray-50 text-sm text-gray-400">
-            Spending Chart
+
+          {/* Bar Chart */}
+          <div className="mt-8 rounded-xl bg-gray-50 px-4 py-6 sm:px-6">
+
+            <div className="flex h-64 items-end justify-between gap-3">
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[45%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">Apr</span>
+              </div>
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[65%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">May</span>
+              </div>
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[50%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">Jun</span>
+              </div>
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[80%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">Jul</span>
+              </div>
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[60%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">Aug</span>
+              </div>
+
+              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
+                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[90%] hover:bg-purple-600" />
+                <span className="text-xs text-gray-500">Sep</span>
+              </div>
+
+            </div>
+
           </div>
+
         </div>
-
         {/* Recent Transactions */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
@@ -94,7 +133,7 @@ const Dashboard = () => {
             </h2>
 
             <Link
-              to="/statements"
+              to="/app/statements"
               className="text-sm font-medium text-purple-600 hover:text-purple-700"
             >
               View all
@@ -104,17 +143,17 @@ const Dashboard = () => {
           <div className="mt-5 space-y-4">
 
             {
-            sortTransactionsByTime(transactions, false)
-            .slice(0,5)
-            .map(transaction => (
-                <RecentTransactionCard 
+              sortTransactionsByTime(transactions, false)
+                .slice(0, 5)
+                .map(transaction => (
+                  <RecentTransactionCard
                     key={transaction.id}
                     title={transaction.title}
                     time={transaction.date}
                     amount={transaction.amount}
-                    spend={transaction.type==="expense"}
-                />
-            ))}
+                    spend={transaction.type === "expense"}
+                  />
+                ))}
           </div>
         </div>
       </div>
@@ -139,7 +178,7 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-5 h-3 overflow-hidden rounded-full bg-gray-100">
-            <div className={`h-full rounded-full bg-purple-600`} style={{width: `${percentage}%`}}/>
+            <div className={`h-full rounded-full bg-purple-600`} style={{ width: `${percentage}%` }} />
           </div>
 
           <p className="mt-3 text-sm text-gray-500">
@@ -155,16 +194,16 @@ const Dashboard = () => {
           <div className="mt-5 space-y-4">
             {/* Top Categories */}
             {categories
-            .filter(category => category.type === "expense")
-            .slice(0,3)
-            .map(category => (
-              <div className="flex items-center justify-between" key={category.id}>
-                <span className="text-sm text-gray-600">{category.title}</span>
-                <span className="text-sm font-medium text-gray-900">
-                  <AmountWrapper amount={getTotalExpenseByCategory(transactions, category.title)} />
-                </span>
-              </div>
-            ))
+              .filter(category => category.type === "expense")
+              .slice(0, 3)
+              .map(category => (
+                <div className="flex items-center justify-between" key={category.id}>
+                  <span className="text-sm text-gray-600">{category.title}</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    <AmountWrapper amount={getTotalExpenseByCategory(transactions, category.title)} />
+                  </span>
+                </div>
+              ))
             }
           </div>
         </div>

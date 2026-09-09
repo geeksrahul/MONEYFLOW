@@ -45,7 +45,7 @@ const Profile = () => {
                             {/* Avatar */}
                             <div className="relative">
                                 <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-3xl font-semibold text-violet-600 ring-4 ring-white shadow-md border">
-                                    <img src={user.personalData.image ?? profileImage} alt="not found " />
+                                    <img src={user?.personalData?.image ?? profileImage} alt="not found " />
                                 </div>
 
                                 {/* Upload button */}
