@@ -41,18 +41,23 @@ function BarChart() {
 
             {/* Bar Chart */}
 
-            <div className="mt-8 rounded-xl bg-gray-50 px-4 py-6 sm:px-6">
-                <div className="flex h-64 items-end justify-between gap-3">
-                    {/* Bar */}
-                    {expenseData.map((month) => {
-                        const percentage = Math.round(month.total/maxExpense * 100);
-                        return (
-                            // i will fix the key later
-                            <Bar key={month.name} percentage={percentage} name={month.name} amount={month.total}/> 
-                        )                        
-                    })}
+            {transactions.length <= 0 ? (
+                <div className='h-84 grid place-items-center bg-gray-100 rounded-xl'> No Record Found </div>
+            ) : (
+                <div className="mt-8 rounded-xl bg-gray-50 px-4 py-6 sm:px-6">
+                    <div className="flex h-64 items-end justify-between gap-3">
+                        {/* Bar */}
+                        {expenseData.map((month) => {
+                            const percentage = Math.round(month.total/maxExpense * 100);
+                            return (
+                                // i will fix the key later
+                                <Bar key={month.name} percentage={percentage} name={month.name} amount={month.total}/> 
+                            )                        
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
+
         </div>
     )
 }

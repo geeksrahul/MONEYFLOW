@@ -1,7 +1,12 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
-    
+    const navigate = useNavigate();
+    const deleteData = () => {
+        localStorage.clear();
+        navigate("/login");
+    }
     useEffect(()=>{
         document.title = "Settings | MoneyFlow";
     }, []);
@@ -252,9 +257,9 @@ const Settings = () => {
 
 
                 {/* Data */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5">
+                <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5">
 
-                    <div className="mb-5">
+                    <div className="">
                         <h2 className="text-lg font-semibold text-gray-900">
                             Data
                         </h2>
@@ -284,11 +289,32 @@ const Settings = () => {
                         </button>
 
                     </div>
+                    <div className="flex items-center justify-between">
+
+                        <div>
+                            <h3 className="text-sm font-medium text-red-700">
+                                Delete Data
+                            </h3>
+
+                            <p className="mt-1 text-sm text-red-700">
+                                Delete Your Entire Data (No Rollback)
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium bg-red-600 text-white transition hover:text-red-700"
+                            onClick={deleteData}
+                        >
+                            Delete Data
+                        </button>
+
+                    </div>
 
                 </div>
 
 
-                {/* Save */}
+                {/* Save
                 <div className="flex justify-end">
 
                     <button
@@ -298,7 +324,7 @@ const Settings = () => {
                         Save Changes
                     </button>
 
-                </div>
+                </div> */}
 
             </div>
 
