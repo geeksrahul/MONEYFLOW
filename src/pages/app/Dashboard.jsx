@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { StatsCard, RecentTransactionCard, AmountWrapper, BarChart} from "../../components";
 import { useCategory, useTransaction, useUser } from "../../contexts"
-import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../../utils/TransactionStats";
+import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalExpenseByMonth, getTotalIncome, sortTransactionsByTime } from "../../utils/TransactionStats";
 import { Link } from "react-router-dom";
 const Dashboard = () => {
 
@@ -12,7 +12,7 @@ const Dashboard = () => {
   const budget = Number(user?.financialData?.budget || 0)
 
   const currentBalance = getCurrentBalance(transactions)
-  const totalExpense = getTotalExpense(transactions)
+  const totalExpense = getTotalExpenseByMonth(transactions, new Date().getMonth(), new Date().getFullYear())
   const totalIncome = getTotalIncome(transactions)
   const percentage = Math.round(totalExpense / budget * 100);
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
         <StatsCard
           cardTitle="Total Balance"
           cardMainData={currentBalance}
-          cardSubData="This month"
+          cardSubData="Overall"
         />
         <StatsCard
           cardTitle="Income"
@@ -50,12 +50,12 @@ const Dashboard = () => {
         <StatsCard
           cardTitle="Expenses"
           cardMainData={totalExpense}
-          cardSubData="8.2% of income"
+          cardSubData="This month"
         />
         <StatsCard
           cardTitle="Budget"
           cardMainData={budget}
-          cardSubData="36.7% of income"
+          cardSubData="monthly"
         />
       </div>
 

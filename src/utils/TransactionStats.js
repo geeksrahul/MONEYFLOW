@@ -15,10 +15,26 @@ const getTotalIncome = (transactions) => {
 }
 
 const getTotalExpense = (transactions) => {
-    return transactions.reduce((expense, transaction) => {
-        const amount = Number(transaction.amount);
-        return transaction.type === "expense" ? expense + amount : expense;
-    }, 0)
+    return transactions
+        .filter(transaction => transaction.type === "expense")
+        .reduce((expense, transaction) => {
+            return expense + Number(transaction.amount);
+        }, 0);
+}
+
+const getTotalExpenseByMonth = (transactions, month, year) => {
+     return transactions
+        .filter(transaction => {
+            const date = new Date(transaction.date)
+            return (
+                transaction.type === "expense" && 
+                month === date.getMonth() && 
+                year === date.getFullYear()
+            );
+        })
+        .reduce((expense, transaction) => {
+            return expense + Number(transaction.amount);
+        }, 0);
 }
 
 const getTotalExpenseByCategory = (transactions, category) => {
@@ -48,5 +64,6 @@ export {
     getTotalIncome,
     getTotalExpenseByCategory,
     sortTransactionsByTime,
-    getExpensesByMonth
+    getExpensesByMonth,
+    getTotalExpenseByMonth
 }
