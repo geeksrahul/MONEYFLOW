@@ -32,6 +32,13 @@ const getTotalExpenseByCategory = (transactions, category) => {
     }, 0)
 }
 
+const getExpensesByMonth = (transactions, month, year) => {
+    return transactions.filter(transaction => {
+        const date = new Date(transaction.date);
+        return (transaction.type === "expense" && date.getMonth() === month && date.getFullYear() === year);
+    })
+}
+
 const sortTransactionsByTime = (transactions, asc = true) => {
     return [...transactions].sort((a, b) => asc ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date))
 }
@@ -40,5 +47,6 @@ export {
     getTotalExpense,
     getTotalIncome,
     getTotalExpenseByCategory,
-    sortTransactionsByTime
+    sortTransactionsByTime,
+    getExpensesByMonth
 }

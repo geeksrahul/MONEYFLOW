@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { StatsCard, RecentTransactionCard, AmountWrapper } from "../../components";
+import { StatsCard, RecentTransactionCard, AmountWrapper, BarChart} from "../../components";
 import { useCategory, useTransaction, useUser } from "../../contexts"
 import { getCurrentBalance, getTotalExpense, getTotalExpenseByCategory, getTotalIncome, sortTransactionsByTime } from "../../utils/TransactionStats";
 import { Link } from "react-router-dom";
-
 const Dashboard = () => {
 
   const { transactions } = useTransaction();
@@ -63,68 +62,7 @@ const Dashboard = () => {
       {/* Main Dashboard Content */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
         {/* Spending Overview */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
-
-          <div className="flex items-center justify-between">
-
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">
-                Spending Overview
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                Your spending over the last few months.
-              </p>
-            </div>
-
-            <select className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 outline-none">
-              <option>Last 6 months</option>
-              <option>This year</option>
-            </select>
-
-          </div>
-
-
-          {/* Bar Chart */}
-          <div className="mt-8 rounded-xl bg-gray-50 px-4 py-6 sm:px-6">
-
-            <div className="flex h-64 items-end justify-between gap-3">
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[45%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">Apr</span>
-              </div>
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[65%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">May</span>
-              </div>
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[50%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">Jun</span>
-              </div>
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[80%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">Jul</span>
-              </div>
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[60%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">Aug</span>
-              </div>
-
-              <div className="flex h-full flex-1 flex-col items-center justify-end gap-3">
-                <div className="w-full max-w-12 rounded-t-md bg-purple-500 h-[90%] hover:bg-purple-600" />
-                <span className="text-xs text-gray-500">Sep</span>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
+        <BarChart />
         {/* Recent Transactions */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
